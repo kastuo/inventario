@@ -1,0 +1,35 @@
+{
+  "name": "inventario-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^1.0.5",
+    "@prisma/client": "^5.13.0",
+    "bcrypt": "^5.1.1",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.1",
+    "next": "^14.2.3",
+    "next-auth": "4.24.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "@types/react": "^18.2.7",
+    "@types/react-dom": "^18.2.4",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.31",
+    "prisma": "^5.13.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
+  }
+}
