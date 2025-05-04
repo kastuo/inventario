@@ -1,36 +1,48 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+import { type AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "@/lib/prisma";
 import { compare } from "bcrypt";
+import type { SessionStrategy } from "next-auth";
 
-const prisma = new PrismaClient();
-
-export const authOptions = {
+export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Contraseña", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
+
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
+          where: { email: credentials.email },
         });
+
         if (!user || !user.password) return null;
 
-        const isValid = await compare(credentials.password, user.password);
-        if (!isValid) return null;
+        const passwordCorrect = await compare(
+          credentials.password,
+          user.password
+        );
 
-        return user;
-      }
-    })
+        if (!passwordCorrect) return null;
+
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        };
+      },
+    }),
   ],
-  session: { strategy: "jwt" },
-  pages: {
-    signIn: "/login"
+  session: {
+    strategy: "jwt" as SessionStrategy,
   },
-  secret: process.env.NEXTAUTH_SECRET
+  pages: {
+    signIn: "/login",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 };
