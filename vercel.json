@@ -1,0 +1,4 @@
+{
+    "ignoreCommand": "echo 'skip build for scripts folder'",
+    "buildCommand": "next build"
+  }
