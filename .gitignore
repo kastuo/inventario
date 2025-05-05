@@ -1,1 +1,10 @@
+# Next.js
+.next
 node_modules
+
+# Entornos
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
