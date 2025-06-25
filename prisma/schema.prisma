@@ -1,0 +1,44 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String?
+  createdAt    DateTime @default(now()) @map("created_at")
+}
+
+model Movimiento {
+  id             Int      @id @default(autoincrement())
+  productoId     Int      @map("producto_id")
+  tipo           String   // 'entrada' | 'salida'  
+  cantidad       Int
+  stockAnterior  Int      @map("stock_anterior")
+  stockDespues   Int      @map("stock_despues")
+  observaciones  String?
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  producto       Producto @relation(fields: [productoId], references: [id])
+
+  @@map("movimientos")
+}
+
+model Producto {
+  id           Int          @id @default(autoincrement())
+  nombre       String       @db.VarChar(255)
+  stockActual  Int          @map("stock_actual")
+  stockMinimo  Int          @map("stock_minimo")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  movimientos  Movimiento[]             // relación inversa
+
+  @@map("productos")
+}
+
