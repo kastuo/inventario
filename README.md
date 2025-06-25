@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📦 Inventario
 
-## Getting Started
+Aplicación web para la gestión de inventario de consumibles y productos de venta en una clínica de depilación láser. Permite llevar el control de productos, registrar movimientos (entradas y salidas), y visualizar métricas en tiempo real.
 
-First, run the development server:
+---
 
-```bash
+## 🚀 Tecnologías
+
+- **Framework**: Next.js 14 + TypeScript  
+- **Base de datos**: Neon PostgreSQL  
+- **ORM**: Prisma  
+- **Autenticación**: NextAuth.js (JWT)  
+- **Estilos**: Tailwind CSS  
+- **Gráficos**: SWR + Chart.js (opcional)  
+- **Exportación**: jsPDF (PDF) y [xlsx](https://github.com/SheetJS/sheetjs) (Excel)  
+
+---
+
+## 🛠️ Prerrequisitos
+
+- Node.js ≥ 18  
+- Git  
+- Cuenta en GitHub  
+- Cuenta en Vercel (para despliegue)  
+
+---
+
+## 🔧 Instalación local
+
+1. Clona el repositorio:  
+   ```bash
+   git clone https://github.com/tu-usuario/inventario.git
+   cd inventario
+Instala dependencias:
+npm install
+
+cp .env.example .env.local
+Rellena .env.local con tus credenciales:
+
+
+DATABASE_URL=postgresql://user:pass@host:5432/dbname
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=tu_secreto_largo
+ADMIN_EMAIL=admin@tudominio.com
+ADMIN_PASSWORD=tu_password_segura
+Genera el cliente de Prisma y aplica migraciones:
+
+npx prisma generate
+npx prisma migrate dev --name init
+
+Arranca en modo desarrollo:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre http://localhost:3000 en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+📁 Estructura de carpetas
+.
+├── prisma/
+│   └── schema.prisma       # Definición de modelos
+├── src/
+│   ├── app/
+│   │   ├── dashboard/      # Dashboard y subpáginas
+│   │   ├── components/     # Modales, tablas, layouts
+│   │   ├── globals.css     # Tailwind import
+│   │   └── layout.tsx      # RootLayout
+│   ├── lib/
+│   │   ├── prisma.ts       # Cliente Prisma
+│   │   └── auth.ts         # Config NextAuth
+│   ├── pages/
+│   │   ├── api/
+│   │   │   ├── productos/  # CRUD productos
+│   │   │   ├── movimientos/ # Entradas/Salidas
+│   │   │   └── dashboard/  # Estadísticas
+│   └── types/
+│       └── index.ts        # Tipos globales
+├── tailwind.config.js
+├── postcss.config.js
+├── next.config.js
+├── package.json
+└── README.md
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+⚙️ Scripts útiles
+npm run dev — Ejecuta en modo desarrollo (localhost:3000).
 
-## Learn More
+npm run build — Compila la app para producción.
 
-To learn more about Next.js, take a look at the following resources:
+npm run start — Arranca el build compilado.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+npm run lint — Ejecuta ESLint.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+npm run format — Formatea con Prettier.
 
-## Deploy on Vercel
+📝 Funcionalidades
+🔐 Autenticación con sesión JWT y roles de administrador.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+📦 CRUD de Productos: añadir, editar, eliminar, exportar (PDF/Excel).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🔄 Movimientos (Entradas/Salidas) unificados en un único módulo.
+
+📊 Dashboard en tiempo real:
+
+Total de productos
+
+Entradas y salidas diarias
+
+Productos en stock crítico
+
+🚨 Alertas visuales para productos con stock bajo.
+
+📈 Gráficos (opcional) de evolución de movimientos.
+
+🖥️ Responsive (móvil y escritorio).
+
+🔒 Seguridad y buenas prácticas
+Variables sensibles en entorno, nunca en el repositorio.
+
+Todos los inputs validados en frontend y backend.
+
+Route-guards en Next.js (layouts y middleware).
+
+Sanitización de datos y protección contra inyección SQL (Prisma).
+
+📄 Licencia
+Este proyecto está bajo la licencia MIT. ¡Contribuciones bienvenidas!
