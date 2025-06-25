@@ -15,30 +15,26 @@ model User {
   createdAt    DateTime @default(now()) @map("created_at")
 }
 
-model Movimiento {
-  id             Int      @id @default(autoincrement())
-  productoId     Int      @map("producto_id")
-  tipo           String   // 'entrada' | 'salida'  
-  cantidad       Int
-  stockAnterior  Int      @map("stock_anterior")
-  stockDespues   Int      @map("stock_despues")
-  observaciones  String?
-  createdAt      DateTime @default(now()) @map("created_at")
-
-  producto       Producto @relation(fields: [productoId], references: [id])
-
-  @@map("movimientos")
-}
-
 model Producto {
-  id           Int          @id @default(autoincrement())
-  nombre       String       @db.VarChar(255)
-  stockActual  Int          @map("stock_actual")
-  stockMinimo  Int          @map("stock_minimo")
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime     @updatedAt @map("updated_at")
-  movimientos  Movimiento[]             // relación inversa
+  id           Int         @id @default(autoincrement())
+  nombre       String
+  stockActual  Int
+  stockMinimo  Int
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 
-  @@map("productos")
+  movimientos  Movimiento[]   // Relación "uno a muchos"
 }
 
+model Movimiento {
+  id            Int       @id @default(autoincrement())
+  productoId    Int
+  producto      Producto  @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  tipo          String
+  subtipo       String?
+  cantidad      Int
+  stockAnterior Int
+  stockDespues  Int
+  observaciones String?
+  createdAt     DateTime  @default(now())
+}
