@@ -5,31 +5,45 @@ import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
 export const authOptions: NextAuthOptions = {
+  // <-- aquí va todo
   secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV !== 'production',  // habilita logs en dev
   session: { strategy: 'jwt' },
   pages: { signIn: '/login' },
+
   providers: [
     CredentialsProvider({
       name: 'Credenciales',
-      credentials: { email: {}, password: {} },
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Contraseña', type: 'password' },
+      },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
         if (!user) return null;
-        const isValid = await bcrypt.compare(credentials.password, user.passwordHash);
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.passwordHash
+        );
         if (!isValid) return null;
-        return { id: user.id.toString(), name: user.name || undefined, email: user.email };
+        return {
+          id: user.id.toString(),
+          name: user.name || undefined,
+          email: user.email,
+        };
       },
     }),
   ],
+
   callbacks: {
     async jwt({ token, user }) {
-      // En login inicial user existe, guardamos su id
       if (user) token.id = user.id;
       return token;
     },
     async session({ session, token }) {
-      // Ahora session.user.id es parte del tipo
       if (token.id) session.user.id = token.id;
       return session;
     },
